@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detector Sentimental</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; background-color: #f9f9f9; }
+        h1 { color: #333; }
+        textarea { width: 320px; height: 100px; border-radius: 8px; border: 1px solid #ccc; padding: 8px; }
+        button { padding: 10px 18px; margin-top: 10px; border: none; border-radius: 6px; background-color: #d76100; color: white; cursor: pointer; }
+        button:hover { background-color: #a32600; }
+        .result { font-size: 1.2em; margin-top: 20px; color: #222; }
+        .history { margin-top: 40px; text-align: left; width: 420px; margin-left: auto; margin-right: auto; }
+        .comment-box { background-color: white; border-radius: 10px; padding: 10px; margin-bottom: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+        .label-pos { color: green; font-weight: bold; }
+        .label-neg { color: red; font-weight: bold; }
+        .label-neu { color: gray; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Detector Sentimental</h1>
+    <form method="post">
+        <textarea name="text" placeholder="Escribe un comentario, uno namás"></textarea><br>
+        <button type="submit">Analiza</button>
+    </form>
+
+    {% if result %}
+    <div class="result">
+        <strong>Analizado:</strong> {{ result['label'] }} ({{ result['score'] | round(2) }})
+    </div>
+    {% endif %}
+
+    {% if history %}
+    <div class="history">
+        <h2>Comentarios</h2>
+        {% for item in history %}
+        <div class="comment-box">
+            <p><strong>Comentario:</strong> {{ item['text'] }}</p>
+            <p>
+                <strong>Sentimiento:</strong>
+                {% if item['label'] == 'POSITIVO' %}
+                    <span class="label-pos">{{ item['label'] }}</span>
+                {% elif item['label'] == 'NEGATIVO' %}
+                    <span class="label-neg">{{ item['label'] }}</span>
+                {% else %}
+                    <span class="label-neu">{{ item['label'] }}</span>
+                {% endif %}
+                ({{ item['score'] | round(2) }})
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</body>
+</html>
